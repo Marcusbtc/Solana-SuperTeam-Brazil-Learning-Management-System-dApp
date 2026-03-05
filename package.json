@@ -1,0 +1,34 @@
+{
+  "name": "superteam-academy-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "onchain-academy/app",
+    "onchain-academy/backend"
+  ],
+  "scripts": {
+    "dev:app": "npm --workspace onchain-academy/app run dev",
+    "dev:backend": "npm --workspace onchain-academy/backend run dev",
+    "build:app": "npm --workspace onchain-academy/app run build",
+    "build:backend": "npm --workspace onchain-academy/backend run build",
+    "lint:app": "npm --workspace onchain-academy/app run lint",
+    "lint:backend": "npm --workspace onchain-academy/backend run lint",
+    "test:e2e": "npm --workspace onchain-academy/app run test:e2e",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "npm --workspace onchain-academy/backend run prisma:generate",
+    "db:migrate": "npm --workspace onchain-academy/backend run prisma:migrate",
+    "db:deploy": "npm --workspace onchain-academy/backend run prisma:deploy",
+    "db:seed": "npm --workspace onchain-academy/backend run prisma:seed",
+    "test:e2e:smoke": "npm --workspace onchain-academy/app run test:e2e:smoke",
+    "qa:release": "npm run lint:app && npm run lint:backend && npm run build:app && npm run build:backend && npm run test:e2e:smoke",
+    "cms:import-sample": "cd onchain-academy/cms/sanity && node ./scripts/import-courses-api.mjs --replace",
+    "cms:import-sample:append": "cd onchain-academy/cms/sanity && node ./scripts/import-courses-api.mjs",
+    "leaderboard:rebuild": "node -e \"const base=(process.env.BACKEND_URL||'').replace(/\\/$/,'');const token=process.env.INTERNAL_JOB_TOKEN;if(!base||!token){console.error('Set BACKEND_URL and INTERNAL_JOB_TOKEN');process.exit(1);}fetch(base+'/v1/internal/jobs/leaderboard/rebuild',{method:'POST',headers:{'x-internal-token':token}}).then(async(r)=>{const txt=await r.text();console.log(txt);process.exit(r.ok?0:1);}).catch((err)=>{console.error(err);process.exit(1);});\""
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

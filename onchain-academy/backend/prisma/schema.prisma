@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String         @id @default(cuid())
+  username          String         @unique
+  displayName       String
+  email             String?        @unique
+  bio               String?
+  avatarUrl         String?
+  twitterUrl        String?
+  githubUrl         String?
+  language          String         @default("en")
+  theme             String         @default("dark")
+  profileVisibility String         @default("public")
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  walletLinks       WalletLink[]
+  progress          UserProgress[]
+  lessonAttempts    LessonAttempt[]
+  streakEvents      StreakEvent[]
+  streakState       StreakState?
+  streakDayEvents   StreakDayEvent[]
+  activityFeed      ActivityFeed[]
+  authSessions      AuthSession[]
+  authProviderLinks AuthProviderLink[]
+  pendingActions    PendingAction[]
+}
+
+model WalletLink {
+  id        String   @id @default(cuid())
+  userId    String
+  address   String   @unique
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserProgress {
+  id                String   @id @default(cuid())
+  userId            String
+  courseId          String
+  completionPercent Int      @default(0)
+  completedLessons  Int      @default(0)
+  totalLessons      Int      @default(0)
+  xpEarned          Int      @default(0)
+  lastLessonId      String?
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model LessonAttempt {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  lessonId    String
+  challengeId String?
+  passed      Boolean  @default(false)
+  score       Int?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, courseId])
+}
+
+model StreakEvent {
+  id           String   @id @default(cuid())
+  userId       String
+  activityDate DateTime
+  type         String
+  xpAwarded    Int      @default(0)
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, activityDate])
+}
+
+model LeaderboardSnapshot {
+  id          String   @id @default(cuid())
+  timeframe   String
+  walletAddress String
+  displayName String
+  xp          Int
+  level       Int
+  streak      Int      @default(0)
+  courseId    String?
+  capturedAt  DateTime @default(now())
+
+  @@index([timeframe, courseId, xp(sort: Desc)])
+}
+
+model CredentialCache {
+  id          String   @id @default(cuid())
+  walletAddress String
+  credentialId String
+  title       String
+  track       String
+  level       Int
+  mintAddress String
+  metadataUri String?
+  verified    Boolean  @default(true)
+  syncedAt    DateTime @default(now())
+
+  @@index([walletAddress])
+  @@unique([walletAddress, credentialId])
+}
+
+model NonceChallenge {
+  id           String   @id @default(cuid())
+  walletAddress String   @unique
+  nonce        String
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+}
+
+model ActivityFeed {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String
+  message   String
+  metadata  String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model AuthSession {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionToken String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AuthProviderLink {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  accessToken       String?
+  refreshToken      String?
+  scope             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model PendingAction {
+  id                String              @id @default(cuid())
+  userId            String
+  type              PendingActionType
+  status            PendingActionStatus @default(accepted)
+  courseId          String?
+  lessonId          String?
+  achievementTypeId String?
+  metadata          Json?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, status])
+}
+
+model StreakState {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  currentDays   Int      @default(0)
+  longestDays   Int      @default(0)
+  freezesLeft   Int      @default(0)
+  lastActiveDay DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StreakDayEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  activityDay DateTime
+  bonusApplied Boolean @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, activityDay])
+  @@index([userId, activityDay])
+}
+
+model LeaderboardBalanceSnapshot {
+  id           String   @id @default(cuid())
+  walletAddress String
+  xpBalance    Int
+  capturedAt   DateTime @default(now())
+
+  @@index([capturedAt])
+  @@index([walletAddress, capturedAt(sort: Desc)])
+}
+
+model JobRun {
+  id         String   @id @default(cuid())
+  jobName    String
+  status     String
+  error      String?
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+
+  @@index([jobName, startedAt(sort: Desc)])
+}
+
+enum PendingActionType {
+  lesson_complete
+  course_finalize
+  achievement_claim
+}
+
+enum PendingActionStatus {
+  accepted
+  processing
+  completed
+  failed
+}

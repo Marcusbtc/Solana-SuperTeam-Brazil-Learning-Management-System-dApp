@@ -1,0 +1,83 @@
+import type { PrismaClient, StreakState } from "@prisma/client";
+
+function toDay(dateInput: Date): Date {
+  return new Date(
+    Date.UTC(
+      dateInput.getUTCFullYear(),
+      dateInput.getUTCMonth(),
+      dateInput.getUTCDate(),
+    ),
+  );
+}
+
+function dayDiff(from: Date, to: Date): number {
+  const ms = toDay(to).getTime() - toDay(from).getTime();
+  return Math.round(ms / (24 * 60 * 60 * 1000));
+}
+
+export async function recordStreakActivity(
+  prisma: PrismaClient,
+  userId: string,
+  inputDate: Date,
+  bonusApplied = false,
+): Promise<StreakState> {
+  const activityDay = toDay(inputDate);
+
+  const existingEvent = await prisma.streakDayEvent.findUnique({
+    where: {
+      userId_activityDay: {
+        userId,
+        activityDay,
+      },
+    },
+  });
+
+  if (!existingEvent) {
+    await prisma.streakDayEvent.create({
+      data: {
+        userId,
+        activityDay,
+        bonusApplied,
+      },
+    });
+  }
+
+  const current = await prisma.streakState.findUnique({ where: { userId } });
+
+  let currentDays = current?.currentDays ?? 0;
+  let longestDays = current?.longestDays ?? 0;
+
+  if (!current?.lastActiveDay) {
+    currentDays = 1;
+    longestDays = Math.max(longestDays, currentDays);
+  } else {
+    const diff = dayDiff(current.lastActiveDay, activityDay);
+    if (diff === 0) {
+      currentDays = current.currentDays;
+    } else if (diff === 1) {
+      currentDays = current.currentDays + 1;
+    } else {
+      currentDays = 1;
+    }
+    longestDays = Math.max(longestDays, currentDays);
+  }
+
+  return prisma.streakState.upsert({
+    where: { userId },
+    update: {
+      currentDays,
+      longestDays,
+      lastActiveDay: activityDay,
+    },
+    create: {
+      userId,
+      currentDays,
+      longestDays,
+      lastActiveDay: activityDay,
+    },
+  });
+}
+
+export function toStreakIsoDay(inputDate: Date): string {
+  return toDay(inputDate).toISOString().slice(0, 10);
+}

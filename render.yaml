@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: superteam-academy-backend
+    env: node
+    rootDir: onchain-academy/backend
+    buildCommand: npm install && npm run prisma:deploy && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: HELIUS_RPC_URL
+        sync: false
+      - key: CREDENTIAL_COLLECTIONS
+        sync: false
+      - key: SOLANA_RPC_URL
+        sync: false
+      - key: XP_MINT
+        sync: false
+      - key: INTERNAL_JOB_TOKEN
+        sync: false
+
+  - type: cron
+    name: superteam-leaderboard-rebuild
+    runtime: node
+    schedule: "*/30 * * * *"
+    rootDir: onchain-academy/backend
+    buildCommand: npm install && npm run prisma:deploy && npm run build
+    startCommand: >-
+      node -e "fetch(process.env.BACKEND_URL + '/v1/internal/jobs/leaderboard/rebuild',
+      {method:'POST',headers:{'x-internal-token':process.env.INTERNAL_JOB_TOKEN}})
+      .then(r=>r.text()).then(t=>{console.log(t);process.exit(0);})
+      .catch(e=>{console.error(e);process.exit(1);})"
+    envVars:
+      - key: BACKEND_URL
+        sync: false
+      - key: INTERNAL_JOB_TOKEN
+        sync: false
