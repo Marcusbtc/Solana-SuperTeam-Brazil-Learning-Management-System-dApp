@@ -38,6 +38,25 @@ export const courseType = defineType({
     defineField({ name: "durationMinutes", type: "number" }),
     defineField({ name: "xpTotal", type: "number" }),
     defineField({
+      name: "badgeTitle",
+      type: "string",
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "badgeTier",
+      type: "string",
+      options: { list: ["bronze", "silver", "gold", "platinum"] },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({ name: "badgeDescription", type: "text" }),
+    defineField({ name: "badgeCriteria", type: "text" }),
+    defineField({
+      name: "badgeIcon",
+      type: "image",
+      options: { hotspot: true },
+      fields: [{ name: "alt", title: "Alt text", type: "string" }],
+    }),
+    defineField({
       name: "track",
       type: "reference",
       to: [{ type: "track" }],

@@ -82,7 +82,7 @@ const fadeUp = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6 },
   },
 };
 
@@ -103,7 +103,7 @@ const STATS = [
   { value: "24/7", label: "On-chain" },
 ];
 
-export default function HomePage(): JSX.Element {
+export default function HomePage(): React.JSX.Element {
   const { t } = useLocale();
   const [featuredCourses, setFeaturedCourses] = useState<CourseSummary[]>([]);
 
@@ -129,7 +129,7 @@ export default function HomePage(): JSX.Element {
 
         {/* Motion blobs */}
         <motion.div
-          className="absolute -top-32 -left-24 z-[1] h-[560px] w-[560px] rounded-full blur-[90px] pointer-events-none"
+          className="absolute -top-32 -left-24 z-[1] hidden h-[560px] w-[560px] rounded-full blur-[90px] pointer-events-none md:block"
           style={{
             background: "rgba(153,69,255,0.42)",
             mixBlendMode: "screen",
@@ -142,7 +142,7 @@ export default function HomePage(): JSX.Element {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute -top-20 -right-24 z-[1] h-[560px] w-[560px] rounded-full blur-[90px] pointer-events-none"
+          className="absolute -top-20 -right-24 z-[1] hidden h-[560px] w-[560px] rounded-full blur-[90px] pointer-events-none md:block"
           style={{
             background: "rgba(20,241,149,0.36)",
             mixBlendMode: "screen",
@@ -155,7 +155,7 @@ export default function HomePage(): JSX.Element {
           transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute -bottom-28 left-1/2 z-[1] h-[460px] w-[740px] -translate-x-1/2 rounded-full blur-[95px] pointer-events-none"
+          className="absolute -bottom-28 left-1/2 z-[1] hidden h-[460px] w-[740px] -translate-x-1/2 rounded-full blur-[95px] pointer-events-none md:block"
           style={{
             background: "rgba(109,83,255,0.26)",
             mixBlendMode: "screen",
@@ -169,7 +169,7 @@ export default function HomePage(): JSX.Element {
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute inset-0 z-[1] pointer-events-none"
+          className="absolute inset-0 z-[1] hidden pointer-events-none md:block"
           style={{
             background:
               "radial-gradient(ellipse 46% 34% at 35% 52%, rgba(153,69,255,0.18), transparent 70%), radial-gradient(ellipse 44% 32% at 66% 46%, rgba(20,241,149,0.16), transparent 70%)",
@@ -246,10 +246,7 @@ export default function HomePage(): JSX.Element {
             <Button
               asChild
               size="lg"
-              className="h-14 px-10 text-base font-bold rounded-full text-black hover:scale-[1.04] transition-all shadow-[0_0_50px_rgba(153,69,255,0.3)] border-0"
-              style={{
-                background: "linear-gradient(135deg, #14F195, #9945FF)",
-              }}
+              className="hero-cta-gradient h-14 px-10 text-base font-bold rounded-full text-black hover:scale-[1.04] transition-all shadow-[0_0_50px_rgba(153,69,255,0.3)] border-0"
             >
               <Link href="/courses">
                 {t("homePage.signUp")} <ArrowRight className="ml-2 h-5 w-5" />
@@ -289,11 +286,11 @@ export default function HomePage(): JSX.Element {
 
         {/* Partner logo marquee strip */}
         <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/8 bg-black/30 backdrop-blur-md py-5 overflow-hidden">
-          <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
+          <div className="flex items-center gap-12 whitespace-nowrap motion-reduce:animate-none animate-none sm:gap-16 md:animate-marquee">
             {[...PARTNER_LOGOS, ...PARTNER_LOGOS].map((partner, i) => (
               <div
                 key={`${partner.name}-${i}`}
-                className="flex h-8 items-center shrink-0"
+                className="flex h-7 shrink-0 items-center sm:h-8"
               >
                 <Image
                   src={partner.src}
@@ -302,8 +299,8 @@ export default function HomePage(): JSX.Element {
                   height={partner.height}
                   className={
                     partner.toneMode === "neutralized"
-                      ? "h-7 w-auto opacity-30 [filter:grayscale(1)_saturate(0)_brightness(0)_invert(1)]"
-                      : "h-7 w-auto opacity-30 grayscale"
+                      ? "h-6 w-auto opacity-30 [filter:grayscale(1)_saturate(0)_brightness(0)_invert(1)] sm:h-7"
+                      : "h-6 w-auto opacity-30 grayscale sm:h-7"
                   }
                 />
               </div>
@@ -765,14 +762,9 @@ export default function HomePage(): JSX.Element {
         variants={fadeUp}
       >
         <motion.div
-          className="rounded-3xl p-14 sm:p-20 relative overflow-hidden border border-white/10"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(153,69,255,0.2) 0%, rgba(20,241,149,0.1) 100%)",
-          }}
+          className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/5 p-14 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-20"
           variants={fadeUp}
         >
-          <div className="absolute inset-0 backdrop-blur-sm rounded-3xl" />
           <div className="relative z-10">
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-6">
               {t("homePage.finalTitle")}

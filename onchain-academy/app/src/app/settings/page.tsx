@@ -58,7 +58,7 @@ type UserProfileResponse = {
   profileVisibility: "public" | "private";
 };
 
-export default function SettingsPage(): JSX.Element {
+export default function SettingsPage(): React.JSX.Element {
   const { data: session, status } = useSession();
   const wallet = useWallet();
   const { theme, setTheme } = useTheme();

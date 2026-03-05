@@ -16,6 +16,7 @@ npm run dev
 - `SANITY_STUDIO_DATASET` (preferred)
 
 The Studio also accepts `SANITY_PROJECT_ID` and `SANITY_DATASET` as fallback names.
+API imports additionally require `SANITY_API_TOKEN` (or `SANITY_STUDIO_API_TOKEN` / `SANITY_TOKEN`).
 
 Create a local env file before starting Studio:
 
@@ -35,12 +36,19 @@ cp .env.example .env
 - `partnerLogo`
 - `siteStat`
 
-## Import Sample Course
+## Import Sample Courses
 
-A sample course export is available at `seed/sample-course.ndjson`.
+A five-course seed export is available at `seed/sample-courses-5.json`.
 
 ```bash
 npm run cms:import-sample
 ```
 
+Optional append mode:
+
+```bash
+npm run cms:import-sample:append
+```
+
+This import runs through Sanity Content API mutations (`createOrReplace`).
 Use a non-production dataset for destructive import/replace operations.

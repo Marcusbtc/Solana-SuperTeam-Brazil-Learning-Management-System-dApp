@@ -10,7 +10,7 @@ const posthogHost =
 
 export function AnalyticsProvider({
   children,
-}: PropsWithChildren): JSX.Element {
+}: PropsWithChildren): React.JSX.Element {
   useEffect(() => {
     const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 

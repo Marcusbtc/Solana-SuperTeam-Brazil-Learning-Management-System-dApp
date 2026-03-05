@@ -40,7 +40,7 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ),
 });
 
-export default function LessonPage(): JSX.Element {
+export default function LessonPage(): React.JSX.Element {
   const { t } = useLocale();
   const { data: session } = useSession();
   const params = useParams<{ slug: string; id: string }>();

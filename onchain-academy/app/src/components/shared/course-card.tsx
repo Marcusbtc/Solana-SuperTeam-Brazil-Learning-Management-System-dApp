@@ -78,7 +78,7 @@ function TrackIcon({
   return <BookOpen className={className} style={style} />;
 }
 
-export function CourseCard({ course }: { course: CourseSummary }): JSX.Element {
+export function CourseCard({ course }: { course: CourseSummary }): React.JSX.Element {
   const d = DIFF[course.difficulty] ?? DIFF.beginner;
 
   return (

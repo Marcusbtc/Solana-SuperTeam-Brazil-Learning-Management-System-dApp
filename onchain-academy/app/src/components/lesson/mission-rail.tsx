@@ -20,7 +20,7 @@ export function MissionRail({
   xpReward: number;
   completion: number;
   steps: MissionStep[];
-}): JSX.Element {
+}): React.JSX.Element {
   const { t } = useLocale();
   return (
     <aside className="w-full xl:w-72 xl:sticky top-20 shrink-0 self-start rounded-2xl border border-border/50 bg-background/50 backdrop-blur-xl p-5 shadow-lg">

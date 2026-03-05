@@ -51,7 +51,7 @@ function avatarInitials(name: string | null, username: string): string {
   return src.slice(0, 2).toUpperCase();
 }
 
-export default function PublicProfilePage({ params }: PageProps): JSX.Element {
+export default function PublicProfilePage({ params }: PageProps): React.JSX.Element {
   const { t } = useLocale();
   const [profile, setProfile] = useState<PublicUserProfile | null>(null);
   const [credentials, setCredentials] = useState<Credential[]>([]);

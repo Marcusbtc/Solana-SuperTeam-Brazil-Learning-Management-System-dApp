@@ -285,7 +285,7 @@ function buildAchievements(
   ];
 }
 
-export default function ProfilePage(): JSX.Element {
+export default function ProfilePage(): React.JSX.Element {
   const { t } = useLocale();
   const { data: session } = useSession();
   const { publicKey } = useWallet();

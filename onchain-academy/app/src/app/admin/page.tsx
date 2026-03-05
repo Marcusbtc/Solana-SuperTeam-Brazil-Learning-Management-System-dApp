@@ -122,7 +122,7 @@ function StatCard({
   );
 }
 
-export default function AdminPage(): JSX.Element {
+export default function AdminPage(): React.JSX.Element {
   const { t } = useLocale();
   const [tab, setTab] = useState<Tab>("overview");
   const [kpis, setKpis] = useState<AdminKpis | null>(null);

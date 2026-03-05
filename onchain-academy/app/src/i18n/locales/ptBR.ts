@@ -12,6 +12,11 @@ export const ptBR = {
   header: {
     toggleLanguage: "Trocar idioma",
     toggleMobileMenu: "Abrir menu móvel",
+    login: "Login",
+    loginWithGithub: "Login com GitHub",
+    loginWithGoogle: "Login com Google",
+    mockLoginTitle: "Login mock",
+    mockLoginDescription: "ainda não está habilitado.",
     levelShort: "Nvl",
     xp: "XP",
     localeEnglish: "Inglês",

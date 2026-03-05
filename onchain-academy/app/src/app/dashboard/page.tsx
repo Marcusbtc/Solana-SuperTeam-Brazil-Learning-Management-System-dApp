@@ -30,7 +30,7 @@ import { learningProgressService } from "@/services/learning-progress-service";
 import { contentService } from "@/services/content-service";
 import type { CourseSummary } from "@/types/domain";
 
-export default function DashboardPage(): JSX.Element {
+export default function DashboardPage(): React.JSX.Element {
   const { t } = useLocale();
   const { data: session } = useSession();
   const { publicKey } = useWallet();

@@ -12,7 +12,7 @@ import { useLocale } from "@/providers/locale-provider";
 import { contentService } from "@/services/content-service";
 import type { CourseSummary } from "@/types/domain";
 
-export default function LeaderboardPage(): JSX.Element {
+export default function LeaderboardPage(): React.JSX.Element {
   const { t } = useLocale();
   const { publicKey } = useWallet();
   const [timeframe, setTimeframe] = useState<Timeframe>("weekly");

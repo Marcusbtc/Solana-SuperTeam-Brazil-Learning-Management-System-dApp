@@ -20,7 +20,7 @@ import { learningProgressService } from "@/services/learning-progress-service";
 import type { Credential } from "@/types/domain";
 import { useLocale } from "@/providers/locale-provider";
 
-export default function CertificatePage(): JSX.Element {
+export default function CertificatePage(): React.JSX.Element {
   const { t } = useLocale();
   const params = useParams<{ id: string }>();
   const { publicKey } = useWallet();

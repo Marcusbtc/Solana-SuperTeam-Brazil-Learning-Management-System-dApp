@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import { useWallet } from "@solana/wallet-adapter-react";
 import {
   BookOpen,
+  Chrome,
+  Github,
   LayoutDashboard,
   Trophy,
   User,
@@ -19,6 +21,7 @@ import type { Locale } from "@/types/domain";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/user-store";
+import { useToast } from "@/hooks/use-toast";
 
 // UI Components
 import { Button } from "@/components/ui/button";
@@ -46,7 +49,7 @@ const WalletMultiButton = dynamic(
   { ssr: false },
 );
 
-export function Header(): JSX.Element {
+export function Header(): React.JSX.Element {
   const pathname = usePathname();
   const { t, locale, setLocale } = useLocale();
   const locales: Locale[] = ["en", "pt-BR", "es"];
@@ -54,6 +57,7 @@ export function Header(): JSX.Element {
   const setWalletAddress = useUserStore((state) => state.setWalletAddress);
   const { xp, level, isLoading } = useUserStore();
   const [mounted, setMounted] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setWalletAddress(publicKey ? publicKey.toBase58() : null);
@@ -70,6 +74,13 @@ export function Header(): JSX.Element {
     es: t("header.localeSpanish"),
   };
 
+  const handleMockLogin = (provider: "GitHub" | "Google") => {
+    toast({
+      title: t("header.mockLoginTitle"),
+      description: `${provider} ${t("header.mockLoginDescription")}`,
+    });
+  };
+
   return (
     <header
       className={
@@ -78,8 +89,8 @@ export function Header(): JSX.Element {
           : "sticky top-0 z-40 w-full border-b border-white/10 bg-black/70 backdrop-blur-[12px]"
       }
     >
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-6">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:gap-6">
           <Link
             href="/"
             className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
@@ -89,10 +100,10 @@ export function Header(): JSX.Element {
               alt="Superteam"
               width={132}
               height={28}
-              className="h-7 w-auto"
+              className="h-6 w-auto sm:h-7"
               priority
             />
-            <span className="font-display text-lg font-semibold tracking-tight text-primary">
+            <span className="font-display text-base font-semibold tracking-tight text-primary sm:text-lg">
               Academy
             </span>
           </Link>
@@ -119,7 +130,7 @@ export function Header(): JSX.Element {
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {publicKey && !isLoading && (
             <div className="hidden sm:flex items-center gap-2.5 bg-muted/30 border border-border/40 px-3 py-1.5 rounded-full">
               <Badge
@@ -180,16 +191,48 @@ export function Header(): JSX.Element {
           </DropdownMenu>
 
           {mounted ? (
-            <WalletMultiButton className="wallet-pill !h-12 !rounded-full !border !border-primary/50 !bg-primary/10 !px-6 !text-sm !font-semibold !text-primary !transition-all hover:!bg-primary/20 hover:!border-primary hover:!shadow-[0_0_15px_rgba(52,211,153,0.3)] !font-display" />
+            <WalletMultiButton className="wallet-pill hidden sm:inline-flex !h-10 !min-w-0 !rounded-full !border !border-primary/50 !bg-primary/10 !px-4 !text-sm !font-semibold !text-primary !transition-all hover:!bg-primary/20 hover:!border-primary hover:!shadow-[0_0_15px_rgba(52,211,153,0.25)] !font-display">
+              {t("header.login")}
+            </WalletMultiButton>
           ) : (
             <Button
               type="button"
-              className="h-12 rounded-full border border-primary/50 bg-primary/10 px-6 text-sm font-semibold text-primary font-display"
+              className="hidden h-10 rounded-full border border-primary/50 bg-primary/10 px-5 text-sm font-semibold text-primary sm:inline-flex font-display"
               disabled
             >
-              Connect Wallet
+              {t("header.login")}
             </Button>
           )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                className="h-9 rounded-full border border-primary/50 bg-primary/10 px-4 text-xs font-semibold text-primary md:hidden"
+              >
+                {t("header.login")}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-[190px] bg-background/95 backdrop-blur-md border-border/50"
+            >
+              <DropdownMenuItem
+                onClick={() => handleMockLogin("GitHub")}
+                className="cursor-pointer"
+              >
+                <Github className="h-4 w-4" />
+                {t("header.loginWithGithub")}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleMockLogin("Google")}
+                className="cursor-pointer"
+              >
+                <Chrome className="h-4 w-4" />
+                {t("header.loginWithGoogle")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile Menu */}
           <Sheet>

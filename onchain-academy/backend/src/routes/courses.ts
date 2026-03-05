@@ -56,6 +56,7 @@ export async function courseRoutes(app: FastifyInstance): Promise<void> {
         track: course.track,
         moduleCount: course.moduleCount,
         lessonCount: course.lessonCount,
+        badge: course.badge,
       }));
   });
 

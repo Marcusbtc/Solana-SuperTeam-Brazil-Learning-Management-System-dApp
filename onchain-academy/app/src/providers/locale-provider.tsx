@@ -42,7 +42,7 @@ function resolvePath(
   return typeof value === "string" ? value : path;
 }
 
-export function LocaleProvider({ children }: PropsWithChildren): JSX.Element {
+export function LocaleProvider({ children }: PropsWithChildren): React.JSX.Element {
   const initialLocale =
     (process.env.NEXT_PUBLIC_DEFAULT_LOCALE as Locale | undefined) ?? "en";
   const [locale, setLocaleState] = useState<Locale>(initialLocale);

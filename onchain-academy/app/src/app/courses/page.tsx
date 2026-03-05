@@ -25,7 +25,7 @@ const ACCENT: Record<FilterValue, string> = {
   advanced: "#FF8C42",
 };
 
-export default function CoursesPage(): JSX.Element {
+export default function CoursesPage(): React.JSX.Element {
   const { t } = useLocale();
   const [courses, setCourses] = useState<CourseSummary[]>([]);
   const [search, setSearch] = useState("");

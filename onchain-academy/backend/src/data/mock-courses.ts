@@ -9,6 +9,13 @@ export type CourseSummary = {
   track: string;
   moduleCount: number;
   lessonCount: number;
+  badge: {
+    title: string;
+    tier: "bronze" | "silver" | "gold" | "platinum";
+    description?: string;
+    criteria?: string;
+    iconUrl?: string;
+  };
 };
 
 export type Lesson = {
@@ -39,6 +46,12 @@ export const courses: CourseDetail[] = [
     track: "Core",
     moduleCount: 3,
     lessonCount: 8,
+    badge: {
+      title: "Solana Foundations",
+      tier: "bronze",
+      description: "Awarded for completing core Solana fundamentals.",
+      criteria: "Finish all lessons and pass the module challenge.",
+    },
     lessons: [
       {
         id: "1",
@@ -81,6 +94,12 @@ export const courses: CourseDetail[] = [
     track: "Anchor",
     moduleCount: 4,
     lessonCount: 12,
+    badge: {
+      title: "Anchor Practitioner",
+      tier: "silver",
+      description: "Awarded for mastering Anchor account patterns.",
+      criteria: "Complete all modules and submit challenge exercises.",
+    },
     lessons: [
       {
         id: "1",
@@ -103,6 +122,12 @@ export const courses: CourseDetail[] = [
     track: "DeFi",
     moduleCount: 5,
     lessonCount: 16,
+    badge: {
+      title: "DeFi Systems Architect",
+      tier: "gold",
+      description: "Awarded for understanding Solana DeFi primitives.",
+      criteria: "Complete full course track and advanced capstone.",
+    },
     lessons: [
       {
         id: "1",

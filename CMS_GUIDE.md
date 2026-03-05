@@ -29,6 +29,10 @@ Sanity workspace files are located at `onchain-academy/cms/sanity`.
 - `durationMinutes`
 - `trackId`
 - `xpTotal`
+- `badgeTitle`
+- `badgeTier` (`bronze` | `silver` | `gold` | `platinum`)
+- `badgeDescription`
+- `badgeCriteria`
 - `editorialStatus` (`draft` | `published`)
 - `publishedAt`
 
@@ -86,22 +90,29 @@ Behavior:
 
 ## Sample Course Import
 
-A sample dataset for one complete course is included at:
+A 5-course seed dataset is included at:
 
-- `onchain-academy/cms/sanity/seed/sample-course.ndjson`
+- `onchain-academy/cms/sanity/seed/sample-courses-5.json`
 
-Import it into your Sanity dataset:
+Import it through the Sanity Content API:
 
 ```bash
 npm run cms:import-sample
+```
+
+Optional append mode (no delete first):
+
+```bash
+npm run cms:import-sample:append
 ```
 
 Notes:
 
 - Default dataset is `production`. To target another dataset, update
   `onchain-academy/cms/sanity/.env` (`SANITY_STUDIO_DATASET`) before running.
-- `--replace` is useful for clean smoke tests in a non-production dataset.
-- After import, validate frontend route flow: `/courses` -> `/courses/[slug]` -> `/courses/[slug]/lessons/[id]`.
+- API import requires a mutation token in `SANITY_API_TOKEN` (or `SANITY_STUDIO_API_TOKEN` / `SANITY_TOKEN`).
+- Replace mode only deletes docs in the `seed-2026-*` namespace before re-importing.
+- After import, validate route flow: `/courses` -> `/courses/[slug]` -> `/courses/[slug]/lessons/[id]`.
 
 ## Submission Mapping Notes
 

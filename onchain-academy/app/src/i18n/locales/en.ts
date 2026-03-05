@@ -12,6 +12,11 @@ export const en = {
   header: {
     toggleLanguage: "Toggle language",
     toggleMobileMenu: "Toggle mobile menu",
+    login: "Login",
+    loginWithGithub: "Login with GitHub",
+    loginWithGoogle: "Login with Google",
+    mockLoginTitle: "Mock login",
+    mockLoginDescription: "login is not enabled yet.",
     levelShort: "Lvl",
     xp: "XP",
     localeEnglish: "English",

@@ -157,7 +157,7 @@ function getNextStep(track: SkillTrack): string {
   return trackStepMap[track];
 }
 
-export function OnboardingGate(): JSX.Element | null {
+export function OnboardingGate(): React.JSX.Element | null {
   const { t } = useLocale();
   const { publicKey } = useWallet();
   const walletAddress = publicKey?.toBase58() ?? null;

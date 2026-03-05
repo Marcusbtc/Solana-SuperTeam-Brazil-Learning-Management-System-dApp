@@ -11,7 +11,7 @@ import { useLocale } from "@/providers/locale-provider";
 import { learningProgressService } from "@/services/learning-progress-service";
 import type { Credential } from "@/types/domain";
 
-export default function CertificatesPage(): JSX.Element {
+export default function CertificatesPage(): React.JSX.Element {
   const { t } = useLocale();
   const { publicKey } = useWallet();
   const [credentials, setCredentials] = useState<Credential[]>([]);

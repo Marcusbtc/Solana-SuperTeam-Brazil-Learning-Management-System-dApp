@@ -48,7 +48,7 @@ const DIFF_LABEL: Record<Difficulty, string> = {
   advanced: "DEEP",
 };
 
-export default function CourseDetailPage(): JSX.Element {
+export default function CourseDetailPage(): React.JSX.Element {
   const { t } = useLocale();
   const { data: session } = useSession();
   const router = useRouter();

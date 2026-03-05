@@ -1,0 +1,394 @@
+{
+  "documents": [
+    {
+      "_id": "seed-2026-track-core",
+      "_type": "track",
+      "title": "Solana Core Engineering",
+      "slug": { "_type": "slug", "current": "solana-core-engineering" },
+      "description": "Core protocol, Anchor, and secure program patterns."
+    },
+    {
+      "_id": "seed-2026-track-advanced",
+      "_type": "track",
+      "title": "Solana Advanced Systems",
+      "slug": { "_type": "slug", "current": "solana-advanced-systems" },
+      "description": "DeFi architecture, runtime performance, and production hardening."
+    },
+
+    {
+      "_id": "seed-2026-challenge-bootcamp-pda",
+      "_type": "challenge",
+      "title": "PDA Derivation Drill",
+      "prompt": "Implement PDA derivation with deterministic seeds and bump checks.",
+      "starterCode": "use anchor_lang::prelude::*;\n\npub fn derive(seed: &[u8]) -> (Pubkey, u8) {\n  // TODO\n  (Pubkey::default(), 0)\n}\n",
+      "language": "rust",
+      "expectedOutput": "Derived PDA matches expected address and bump."
+    },
+    {
+      "_id": "seed-2026-challenge-anchor-constraints",
+      "_type": "challenge",
+      "title": "Anchor Constraints Lab",
+      "prompt": "Harden an instruction by applying ownership, mutability, and signer constraints.",
+      "starterCode": "#[derive(Accounts)]\npub struct Execute<'info> {\n  // TODO\n}\n",
+      "language": "rust",
+      "expectedOutput": "Invalid accounts are rejected by constraints."
+    },
+    {
+      "_id": "seed-2026-challenge-security-signer",
+      "_type": "challenge",
+      "title": "Signer Authorization Test",
+      "prompt": "Patch an instruction so only authorized signers can mutate state.",
+      "starterCode": "pub fn update(ctx: Context<Update>) -> Result<()> {\n  // TODO\n  Ok(())\n}\n",
+      "language": "rust",
+      "expectedOutput": "Unauthorized caller path fails with custom error."
+    },
+    {
+      "_id": "seed-2026-challenge-defi-risk",
+      "_type": "challenge",
+      "title": "Risk Guardrails",
+      "prompt": "Add liquidation threshold and health-factor checks to a lending flow.",
+      "starterCode": "pub fn validate_position() -> Result<()> {\n  // TODO\n  Ok(())\n}\n",
+      "language": "rust",
+      "expectedOutput": "Unsafe positions are blocked before execution."
+    },
+    {
+      "_id": "seed-2026-challenge-performance-budget",
+      "_type": "challenge",
+      "title": "Compute Budget Optimization",
+      "prompt": "Refactor a hot path to reduce compute usage and account lock contention.",
+      "starterCode": "pub fn process_batch() -> Result<()> {\n  // TODO\n  Ok(())\n}\n",
+      "language": "rust",
+      "expectedOutput": "Execution remains correct with lower compute consumption."
+    },
+
+    {
+      "_id": "seed-2026-lesson-bootcamp-1",
+      "_type": "lesson",
+      "lessonId": "bootcamp-lesson-1",
+      "title": "Solana Runtime Fundamentals",
+      "order": 1,
+      "module": "Module 1: Foundations",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## Runtime Basics\nLearn account ownership, rent, and execution model fundamentals."
+    },
+    {
+      "_id": "seed-2026-lesson-bootcamp-2",
+      "_type": "lesson",
+      "lessonId": "bootcamp-lesson-2",
+      "title": "PDA Fundamentals",
+      "order": 2,
+      "module": "Module 1: Foundations",
+      "lessonType": "challenge",
+      "language": "rust",
+      "markdown": "Implement deterministic PDA derivation and validation.",
+      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-bootcamp-pda" }
+    },
+
+    {
+      "_id": "seed-2026-lesson-anchor-1",
+      "_type": "lesson",
+      "lessonId": "anchor-core-lesson-1",
+      "title": "Anchor Accounts and Context",
+      "order": 1,
+      "module": "Module 1: Anchor Core",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## Anchor Core\nModel account structs and instruction contexts safely."
+    },
+    {
+      "_id": "seed-2026-lesson-anchor-2",
+      "_type": "lesson",
+      "lessonId": "anchor-core-lesson-2",
+      "title": "Constraint-Driven Safety",
+      "order": 2,
+      "module": "Module 1: Anchor Core",
+      "lessonType": "challenge",
+      "language": "rust",
+      "markdown": "Apply account constraints to reject invalid instruction inputs.",
+      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-anchor-constraints" }
+    },
+
+    {
+      "_id": "seed-2026-lesson-security-1",
+      "_type": "lesson",
+      "lessonId": "security-lesson-1",
+      "title": "Threat Modeling Solana Programs",
+      "order": 1,
+      "module": "Module 1: Secure Design",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## Threat Modeling\nIdentify authority, replay, and CPI risk surfaces."
+    },
+    {
+      "_id": "seed-2026-lesson-security-2",
+      "_type": "lesson",
+      "lessonId": "security-lesson-2",
+      "title": "Authorization in Practice",
+      "order": 2,
+      "module": "Module 2: Defensive Patterns",
+      "lessonType": "challenge",
+      "language": "rust",
+      "markdown": "Patch signer validation and privilege boundaries.",
+      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-security-signer" }
+    },
+
+    {
+      "_id": "seed-2026-lesson-defi-1",
+      "_type": "lesson",
+      "lessonId": "defi-lesson-1",
+      "title": "AMM and Lending Primitives",
+      "order": 1,
+      "module": "Module 1: Protocol Primitives",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## DeFi Primitives\nCompare liquidity and debt models on Solana."
+    },
+    {
+      "_id": "seed-2026-lesson-defi-2",
+      "_type": "lesson",
+      "lessonId": "defi-lesson-2",
+      "title": "Risk Guardrails",
+      "order": 2,
+      "module": "Module 2: Risk Controls",
+      "lessonType": "challenge",
+      "language": "rust",
+      "markdown": "Implement health-factor and liquidation protections.",
+      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-defi-risk" }
+    },
+
+    {
+      "_id": "seed-2026-lesson-performance-1",
+      "_type": "lesson",
+      "lessonId": "performance-lesson-1",
+      "title": "Compute Budget Fundamentals",
+      "order": 1,
+      "module": "Module 1: Runtime Efficiency",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## Compute Units\nMeasure and reduce compute costs in hot instructions."
+    },
+    {
+      "_id": "seed-2026-lesson-performance-2",
+      "_type": "lesson",
+      "lessonId": "performance-lesson-2",
+      "title": "Parallelism and Account Locks",
+      "order": 2,
+      "module": "Module 2: Throughput",
+      "lessonType": "content",
+      "contentFormat": "reading",
+      "markdown": "## Throughput\nDesign state access to minimize lock contention."
+    },
+    {
+      "_id": "seed-2026-lesson-performance-3",
+      "_type": "lesson",
+      "lessonId": "performance-lesson-3",
+      "title": "Optimization Lab",
+      "order": 3,
+      "module": "Module 2: Throughput",
+      "lessonType": "challenge",
+      "language": "rust",
+      "markdown": "Refactor instruction flow for lower compute and better throughput.",
+      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-performance-budget" }
+    },
+
+    {
+      "_id": "seed-2026-module-bootcamp-1",
+      "_type": "module",
+      "title": "Module 1: Foundations",
+      "order": 1,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-bootcamp-1" },
+        { "_type": "reference", "_ref": "seed-2026-lesson-bootcamp-2" }
+      ]
+    },
+
+    {
+      "_id": "seed-2026-module-anchor-1",
+      "_type": "module",
+      "title": "Module 1: Anchor Core",
+      "order": 1,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-anchor-1" },
+        { "_type": "reference", "_ref": "seed-2026-lesson-anchor-2" }
+      ]
+    },
+
+    {
+      "_id": "seed-2026-module-security-1",
+      "_type": "module",
+      "title": "Module 1: Secure Design",
+      "order": 1,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-security-1" }
+      ]
+    },
+    {
+      "_id": "seed-2026-module-security-2",
+      "_type": "module",
+      "title": "Module 2: Defensive Patterns",
+      "order": 2,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-security-2" }
+      ]
+    },
+
+    {
+      "_id": "seed-2026-module-defi-1",
+      "_type": "module",
+      "title": "Module 1: Protocol Primitives",
+      "order": 1,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-defi-1" }
+      ]
+    },
+    {
+      "_id": "seed-2026-module-defi-2",
+      "_type": "module",
+      "title": "Module 2: Risk Controls",
+      "order": 2,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-defi-2" }
+      ]
+    },
+
+    {
+      "_id": "seed-2026-module-performance-1",
+      "_type": "module",
+      "title": "Module 1: Runtime Efficiency",
+      "order": 1,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-performance-1" }
+      ]
+    },
+    {
+      "_id": "seed-2026-module-performance-2",
+      "_type": "module",
+      "title": "Module 2: Throughput",
+      "order": 2,
+      "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-performance-2" },
+        { "_type": "reference", "_ref": "seed-2026-lesson-performance-3" }
+      ]
+    },
+
+    {
+      "_id": "seed-2026-course-bootcamp",
+      "_type": "course",
+      "courseId": "solana-bootcamp-101",
+      "title": "Solana Bootcamp 101",
+      "slug": { "_type": "slug", "current": "solana-bootcamp-101" },
+      "summary": "Start building with Solana from first principles.",
+      "description": "Hands-on intro to Solana architecture, accounts, and PDAs.",
+      "difficulty": "beginner",
+      "durationMinutes": 180,
+      "xpTotal": 600,
+      "badgeTitle": "Bootcamp Graduate",
+      "badgeTier": "bronze",
+      "badgeDescription": "Awarded for completing the Solana fundamentals bootcamp.",
+      "badgeCriteria": "Complete all lessons and pass the PDA challenge.",
+      "track": { "_type": "reference", "_ref": "seed-2026-track-core" },
+      "trackId": "solana-core-engineering",
+      "editorialStatus": "published",
+      "publishedAt": "2026-03-04T00:00:00.000Z",
+      "modules": [
+        { "_type": "reference", "_ref": "seed-2026-module-bootcamp-1" }
+      ]
+    },
+    {
+      "_id": "seed-2026-course-anchor-core",
+      "_type": "course",
+      "courseId": "anchor-core-patterns",
+      "title": "Anchor Core Patterns",
+      "slug": { "_type": "slug", "current": "anchor-core-patterns" },
+      "summary": "Build safer Solana programs with Anchor constraints.",
+      "description": "Practical Anchor patterns for accounts, validation, and errors.",
+      "difficulty": "intermediate",
+      "durationMinutes": 220,
+      "xpTotal": 800,
+      "badgeTitle": "Anchor Builder",
+      "badgeTier": "silver",
+      "badgeDescription": "Awarded for mastering Anchor account and instruction patterns.",
+      "badgeCriteria": "Complete all modules and pass the constraints lab.",
+      "track": { "_type": "reference", "_ref": "seed-2026-track-core" },
+      "trackId": "solana-core-engineering",
+      "editorialStatus": "published",
+      "publishedAt": "2026-03-04T00:00:00.000Z",
+      "modules": [
+        { "_type": "reference", "_ref": "seed-2026-module-anchor-1" }
+      ]
+    },
+    {
+      "_id": "seed-2026-course-security",
+      "_type": "course",
+      "courseId": "solana-security-basics",
+      "title": "Solana Security Basics",
+      "slug": { "_type": "slug", "current": "solana-security-basics" },
+      "summary": "Understand and mitigate common Solana smart contract risks.",
+      "description": "Security fundamentals across authorization, CPIs, and state validation.",
+      "difficulty": "intermediate",
+      "durationMinutes": 260,
+      "xpTotal": 900,
+      "badgeTitle": "Security Defender",
+      "badgeTier": "gold",
+      "badgeDescription": "Awarded for shipping secure Solana program patterns.",
+      "badgeCriteria": "Finish both modules and pass the authorization challenge.",
+      "track": { "_type": "reference", "_ref": "seed-2026-track-core" },
+      "trackId": "solana-core-engineering",
+      "editorialStatus": "published",
+      "publishedAt": "2026-03-04T00:00:00.000Z",
+      "modules": [
+        { "_type": "reference", "_ref": "seed-2026-module-security-1" },
+        { "_type": "reference", "_ref": "seed-2026-module-security-2" }
+      ]
+    },
+    {
+      "_id": "seed-2026-course-defi",
+      "_type": "course",
+      "courseId": "defi-protocol-foundations",
+      "title": "DeFi Protocol Foundations",
+      "slug": { "_type": "slug", "current": "defi-protocol-foundations" },
+      "summary": "Model robust DeFi systems on Solana.",
+      "description": "Explore protocol mechanics, risk controls, and failure domains.",
+      "difficulty": "advanced",
+      "durationMinutes": 300,
+      "xpTotal": 1100,
+      "badgeTitle": "Protocol Strategist",
+      "badgeTier": "gold",
+      "badgeDescription": "Awarded for understanding DeFi architecture and controls.",
+      "badgeCriteria": "Complete all modules and implement risk guardrails.",
+      "track": { "_type": "reference", "_ref": "seed-2026-track-advanced" },
+      "trackId": "solana-advanced-systems",
+      "editorialStatus": "published",
+      "publishedAt": "2026-03-04T00:00:00.000Z",
+      "modules": [
+        { "_type": "reference", "_ref": "seed-2026-module-defi-1" },
+        { "_type": "reference", "_ref": "seed-2026-module-defi-2" }
+      ]
+    },
+    {
+      "_id": "seed-2026-course-performance",
+      "_type": "course",
+      "courseId": "solana-performance-labs",
+      "title": "Solana Performance Labs",
+      "slug": { "_type": "slug", "current": "solana-performance-labs" },
+      "summary": "Optimize runtime throughput and compute usage.",
+      "description": "Hands-on labs for account contention, compute budgets, and scaling patterns.",
+      "difficulty": "advanced",
+      "durationMinutes": 340,
+      "xpTotal": 1300,
+      "badgeTitle": "Performance Specialist",
+      "badgeTier": "platinum",
+      "badgeDescription": "Awarded for delivering high-throughput Solana program patterns.",
+      "badgeCriteria": "Finish all labs and pass the optimization challenge.",
+      "track": { "_type": "reference", "_ref": "seed-2026-track-advanced" },
+      "trackId": "solana-advanced-systems",
+      "editorialStatus": "published",
+      "publishedAt": "2026-03-04T00:00:00.000Z",
+      "modules": [
+        { "_type": "reference", "_ref": "seed-2026-module-performance-1" },
+        { "_type": "reference", "_ref": "seed-2026-module-performance-2" }
+      ]
+    }
+  ]
+}

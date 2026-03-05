@@ -6,7 +6,7 @@ import { Twitter, Github, Mail } from "lucide-react";
 import { useLocale } from "@/providers/locale-provider";
 import { Button } from "@/components/ui/button";
 
-export function Footer(): JSX.Element {
+export function Footer(): React.JSX.Element {
   const { t } = useLocale();
 
   return (

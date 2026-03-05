@@ -6,7 +6,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { OnboardingGate } from "@/components/onboarding/onboarding-gate";
 
-export function SiteShell({ children }: PropsWithChildren): JSX.Element {
+export function SiteShell({ children }: PropsWithChildren): React.JSX.Element {
   const pathname = usePathname();
   const isHome = pathname === "/";
 
