@@ -57,6 +57,7 @@ type AdminUsersResponse = {
 };
 
 type Tab = "overview" | "courses" | "users";
+type AdminCheckResponse = { isAdmin: boolean };
 
 async function fetchAdmin<T>(
   path: string,
@@ -156,7 +157,23 @@ export default function AdminPage(): React.JSX.Element {
     setStatus("loading");
     setErrorMessage("");
     const adminWallet = publicKey?.toBase58();
+    if (!adminWallet) {
+      setStatus("error");
+      setErrorMessage(t("adminPage.connectWallet"));
+      return;
+    }
+
     try {
+      const adminCheck = await fetchAdmin<AdminCheckResponse>(
+        "/api/admin/is-admin",
+        adminWallet,
+      );
+      if (!adminCheck.isAdmin) {
+        setStatus("error");
+        setErrorMessage(t("adminPage.unauthorized"));
+        return;
+      }
+
       const [fetchedKpis, fetchedCourses, fetchedUsers] = await Promise.all([
         fetchAdmin<AdminKpis>("/api/admin/kpis", adminWallet),
         fetchAdmin<AdminCourse[]>("/api/admin/courses", adminWallet),
@@ -175,7 +192,7 @@ export default function AdminPage(): React.JSX.Element {
       );
       setStatus("error");
     }
-  }, [publicKey]);
+  }, [publicKey, t]);
 
   useEffect(() => {
     void loadData();

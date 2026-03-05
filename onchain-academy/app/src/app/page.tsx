@@ -286,7 +286,7 @@ export default function HomePage(): React.JSX.Element {
 
         {/* Partner logo marquee strip */}
         <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/8 bg-black/30 backdrop-blur-md py-5 overflow-hidden">
-          <div className="flex items-center gap-12 whitespace-nowrap motion-reduce:animate-none animate-none sm:gap-16 md:animate-marquee">
+          <div className="flex items-center gap-12 whitespace-nowrap animate-marquee motion-reduce:animate-none [animation-duration:24s] sm:gap-16 sm:[animation-duration:30s]">
             {[...PARTNER_LOGOS, ...PARTNER_LOGOS].map((partner, i) => (
               <div
                 key={`${partner.name}-${i}`}

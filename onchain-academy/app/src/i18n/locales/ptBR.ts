@@ -371,6 +371,8 @@ export const ptBR = {
     totalXpTracked: "XP total rastreado",
     loading: "Carregando métricas administrativas...",
     error: "Não foi possível carregar dados administrativos.",
+    connectWallet: "Conecte sua carteira para acessar o admin.",
+    unauthorized: "Esta carteira não tem acesso administrativo.",
     empty: "Ainda não há análise de cursos.",
     noUsers: "Ainda não há usuários.",
     course: "Curso",

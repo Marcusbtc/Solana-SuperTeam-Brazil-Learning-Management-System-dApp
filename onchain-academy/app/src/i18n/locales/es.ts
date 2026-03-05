@@ -372,6 +372,8 @@ export const es = {
     totalXpTracked: "XP total rastreado",
     loading: "Cargando métricas de admin...",
     error: "No se pudieron cargar datos admin.",
+    connectWallet: "Conecta tu wallet para acceder al admin.",
+    unauthorized: "Esta wallet no tiene acceso de admin.",
     empty: "Aún no hay analítica de cursos.",
     noUsers: "Aún no hay usuarios.",
     course: "Curso",

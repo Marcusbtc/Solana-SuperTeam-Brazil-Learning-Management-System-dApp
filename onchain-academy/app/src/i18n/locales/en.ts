@@ -370,6 +370,8 @@ export const en = {
     totalXpTracked: "Total XP tracked",
     loading: "Loading admin metrics...",
     error: "Could not load admin data.",
+    connectWallet: "Connect your wallet to access admin.",
+    unauthorized: "This wallet does not have admin access.",
     empty: "No course analytics available yet.",
     noUsers: "No users available yet.",
     course: "Course",
