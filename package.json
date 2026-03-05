@@ -26,9 +26,5 @@
     "cms:import-sample:append": "cd onchain-academy/cms/sanity && node ./scripts/import-courses-api.mjs",
     "leaderboard:rebuild": "node -e \"const base=(process.env.BACKEND_URL||'').replace(/\\/$/,'');const token=process.env.INTERNAL_JOB_TOKEN;if(!base||!token){console.error('Set BACKEND_URL and INTERNAL_JOB_TOKEN');process.exit(1);}fetch(base+'/v1/internal/jobs/leaderboard/rebuild',{method:'POST',headers:{'x-internal-token':token}}).then(async(r)=>{const txt=await r.text();console.log(txt);process.exit(r.ok?0:1);}).catch((err)=>{console.error(err);process.exit(1);});\""
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  }
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

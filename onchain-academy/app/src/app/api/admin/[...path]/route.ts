@@ -39,16 +39,14 @@ async function proxyAdminRequest(
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ path: string[] }> },
+  { params }: { params: { path: string[] } },
 ): Promise<NextResponse> {
-  const params = await context.params;
   return proxyAdminRequest(request, params, "GET");
 }
 
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ path: string[] }> },
+  { params }: { params: { path: string[] } },
 ): Promise<NextResponse> {
-  const params = await context.params;
   return proxyAdminRequest(request, params, "PATCH");
 }
