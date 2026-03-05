@@ -3,16 +3,24 @@ services:
     name: superteam-academy-backend
     env: node
     rootDir: onchain-academy/backend
-    buildCommand: npm install && npm run prisma:deploy && npm run build
-    startCommand: npm run start
+    buildCommand: npm ci && npm run prisma:generate && npm run build
+    startCommand: npm run prisma:deploy && npm run start
+    healthCheckPath: /health
+    autoDeploy: true
     envVars:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
         sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
       - key: CORS_ORIGIN
         sync: false
       - key: HELIUS_RPC_URL
+        sync: false
+      - key: HELIUS_API_KEY
         sync: false
       - key: CREDENTIAL_COLLECTIONS
         sync: false
@@ -22,13 +30,37 @@ services:
         sync: false
       - key: INTERNAL_JOB_TOKEN
         sync: false
+      - key: SANITY_PROJECT_ID
+        sync: false
+      - key: SANITY_DATASET
+        value: production
+      - key: SANITY_API_VERSION
+        value: "2025-01-01"
+      - key: SANITY_TOKEN
+        sync: false
+      - key: SANITY_USE_CDN
+        value: "false"
+
+  - type: static
+    name: superteam-academy-sanity-studio
+    rootDir: onchain-academy/cms/sanity
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: SANITY_STUDIO_PROJECT_ID
+        sync: false
+      - key: SANITY_STUDIO_DATASET
+        value: production
 
   - type: cron
     name: superteam-leaderboard-rebuild
-    runtime: node
+    env: node
     schedule: "*/30 * * * *"
     rootDir: onchain-academy/backend
-    buildCommand: npm install && npm run prisma:deploy && npm run build
+    buildCommand: npm ci && npm run build
     startCommand: >-
       node -e "fetch(process.env.BACKEND_URL + '/v1/internal/jobs/leaderboard/rebuild',
       {method:'POST',headers:{'x-internal-token':process.env.INTERNAL_JOB_TOKEN}})
