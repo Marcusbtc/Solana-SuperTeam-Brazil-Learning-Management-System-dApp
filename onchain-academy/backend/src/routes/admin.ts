@@ -20,10 +20,19 @@ export async function adminRoutes(app: FastifyInstance): Promise<void> {
 
     const walletLink = await prisma.walletLink.findUnique({
       where: { address: walletAddress },
-      include: { user: { select: { isAdmin: true } } },
     });
 
-    if (!walletLink?.user.isAdmin) {
+    if (!walletLink) {
+      return reply.code(401).send({ error: "Unauthorized" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: walletLink.userId },
+    });
+    const isAdmin =
+      (user as unknown as { isAdmin?: boolean } | null)?.isAdmin === true;
+
+    if (!isAdmin) {
       return reply.code(401).send({ error: "Unauthorized" });
     }
   });
