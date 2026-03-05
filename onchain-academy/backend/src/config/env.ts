@@ -7,10 +7,7 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
-  BACKEND_PORT: z
-    .coerce
-    .number()
-    .default(Number(process.env.PORT ?? 4000)),
+  BACKEND_PORT: z.coerce.number().default(Number(process.env.PORT ?? 4000)),
   CORS_ORIGIN: z.string().default("http://localhost:3000"),
   DATABASE_URL: z.string().min(1),
   JWT_SECRET: z.string().default("replace-me"),

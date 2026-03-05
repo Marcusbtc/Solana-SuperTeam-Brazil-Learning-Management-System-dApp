@@ -11,7 +11,9 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-export function SolanaProvider({ children }: PropsWithChildren): React.JSX.Element {
+export function SolanaProvider({
+  children,
+}: PropsWithChildren): React.JSX.Element {
   const endpoint =
     process.env.NEXT_PUBLIC_HELIUS_RPC_URL ||
     process.env.NEXT_PUBLIC_SOLANA_RPC_URL ||

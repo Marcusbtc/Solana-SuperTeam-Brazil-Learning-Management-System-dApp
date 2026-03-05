@@ -10,6 +10,7 @@ import {
   Activity,
   Star,
 } from "lucide-react";
+import type { Credential } from "@/types/domain";
 import {
   Card,
   CardContent,
@@ -22,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "@/providers/locale-provider";
 import { apiFetch } from "@/lib/api-client";
 import { learningProgressService } from "@/services/learning-progress-service";
-import type { Credential } from "@/types/domain";
 import { getPublicAchievements } from "@/services/achievement-service";
 
 type PageProps = {
@@ -42,6 +42,135 @@ type PublicUserProfile = {
   level: number;
 };
 
+const SKILL_AXES = ["Rust", "Anchor", "DeFi", "Security", "Frontend"];
+const CHART_SIZE = 200;
+const CENTER = CHART_SIZE / 2;
+const RADIUS = CHART_SIZE / 2 - 28;
+const N = SKILL_AXES.length;
+
+type SkillScore = { label: string; value: number };
+
+function polarToXY(angleDeg: number, r: number): { x: number; y: number } {
+  const rad = ((angleDeg - 90) * Math.PI) / 180;
+  return { x: CENTER + r * Math.cos(rad), y: CENTER + r * Math.sin(rad) };
+}
+
+function buildPolygon(scores: number[]): string {
+  return scores
+    .map((score, i) => {
+      const { x, y } = polarToXY((360 / N) * i, (score / 100) * RADIUS);
+      return `${x},${y}`;
+    })
+    .join(" ");
+}
+
+function SkillRadarChart({
+  skills,
+}: {
+  skills: SkillScore[];
+}): React.JSX.Element {
+  const scores = skills.map((s) => s.value);
+  const rings = [25, 50, 75, 100];
+  return (
+    <svg
+      width={CHART_SIZE}
+      height={CHART_SIZE}
+      viewBox={`0 0 ${CHART_SIZE} ${CHART_SIZE}`}
+      className="overflow-visible"
+      aria-label="Skill radar chart"
+    >
+      {rings.map((pct) => (
+        <polygon
+          key={pct}
+          points={Array.from({ length: N }, (_, i) => {
+            const { x, y } = polarToXY((360 / N) * i, (pct / 100) * RADIUS);
+            return `${x},${y}`;
+          }).join(" ")}
+          fill="none"
+          stroke="rgba(255,255,255,0.06)"
+          strokeWidth="1"
+        />
+      ))}
+      {Array.from({ length: N }, (_, i) => {
+        const { x, y } = polarToXY((360 / N) * i, RADIUS);
+        return (
+          <line
+            key={i}
+            x1={CENTER}
+            y1={CENTER}
+            x2={x}
+            y2={y}
+            stroke="rgba(255,255,255,0.08)"
+            strokeWidth="1"
+          />
+        );
+      })}
+      <polygon
+        points={buildPolygon(scores)}
+        fill="rgba(20,241,149,0.12)"
+        stroke="#14F195"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      {scores.map((score, i) => {
+        const { x, y } = polarToXY((360 / N) * i, (score / 100) * RADIUS);
+        return (
+          <circle key={i} cx={x} cy={y} r="3" fill="#14F195" opacity="0.9" />
+        );
+      })}
+      {skills.map((skill, i) => {
+        const { x, y } = polarToXY((360 / N) * i, RADIUS + 18);
+        return (
+          <text
+            key={i}
+            x={x}
+            y={y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="9"
+            fill="rgba(255,255,255,0.6)"
+            fontFamily="monospace"
+          >
+            {skill.label}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+function deriveSkillScores(
+  credentials: Credential[],
+  xp: number,
+): SkillScore[] {
+  const baseXp = Math.min(50, Math.floor(xp / 20));
+  const trackMap: Record<string, number> = {};
+  for (const cred of credentials) {
+    const track = cred.track.toLowerCase();
+    trackMap[track] = (trackMap[track] ?? 0) + 1;
+  }
+  function scoreForTrack(keywords: string[]): number {
+    let count = 0;
+    for (const [track, n] of Object.entries(trackMap)) {
+      if (keywords.some((kw) => track.includes(kw))) count += n;
+    }
+    return Math.min(100, baseXp + count * 25);
+  }
+  return [
+    { label: "Rust", value: scoreForTrack(["rust"]) },
+    { label: "Anchor", value: scoreForTrack(["anchor"]) },
+    { label: "DeFi", value: scoreForTrack(["defi", "finance", "swap"]) },
+    {
+      label: "Security",
+      value: scoreForTrack(["security", "audit", "program"]),
+    },
+    {
+      label: "Frontend",
+      value: scoreForTrack(["frontend", "web", "react", "ui"]),
+    },
+  ];
+}
+
 function avatarInitials(name: string | null, username: string): string {
   const src = name ?? username;
   const parts = src.trim().split(/\s+/);
@@ -51,7 +180,9 @@ function avatarInitials(name: string | null, username: string): string {
   return src.slice(0, 2).toUpperCase();
 }
 
-export default function PublicProfilePage({ params }: PageProps): React.JSX.Element {
+export default function PublicProfilePage({
+  params,
+}: PageProps): React.JSX.Element {
   const { t } = useLocale();
   const [profile, setProfile] = useState<PublicUserProfile | null>(null);
   const [credentials, setCredentials] = useState<Credential[]>([]);
@@ -125,6 +256,7 @@ export default function PublicProfilePage({ params }: PageProps): React.JSX.Elem
   const initials = avatarInitials(profile.displayName, params.username);
   const topPercent =
     profile.level > 5 ? "Top 10%" : profile.level > 2 ? "Top 25%" : "Top 50%";
+  const skills = deriveSkillScores(credentials, profile.xp);
   const achievements = getPublicAchievements({
     level: profile.level,
     xp: profile.xp,
@@ -219,6 +351,30 @@ export default function PublicProfilePage({ params }: PageProps): React.JSX.Elem
           </Card>
         ))}
       </div>
+
+      {/* Skills */}
+      <Card className="bg-background/40 backdrop-blur-md border-border/50 shadow-lg">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-display flex items-center gap-2">
+            <Activity className="h-5 w-5 text-primary" /> Skills
+          </CardTitle>
+          <CardDescription>On-chain activity breakdown</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col sm:flex-row items-center gap-6 pb-6">
+          <SkillRadarChart skills={skills} />
+          <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 w-full sm:w-auto">
+            {skills.map((skill) => (
+              <div
+                key={skill.label}
+                className="flex items-center justify-between gap-4 text-xs"
+              >
+                <span className="text-muted-foreground">{skill.label}</span>
+                <span className="font-mono text-primary">{skill.value}%</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Credentials */}

@@ -91,14 +91,27 @@ class ApiLearningProgressService implements LearningProgressService {
       "confirmed",
     );
 
-    const xp = await onchainAcademyService.fetchXpBalance(
-      connection,
-      new PublicKey(walletAddress),
-    );
-    return {
-      xp,
-      level: Math.floor(Math.sqrt(xp / 100)),
-    };
+    try {
+      const onchainXp = await onchainAcademyService.fetchXpBalance(
+        connection,
+        new PublicKey(walletAddress),
+      );
+      if (onchainXp > 0) {
+        return { xp: onchainXp, level: Math.floor(Math.sqrt(onchainXp / 100)) };
+      }
+    } catch {
+      // fall through to backend fallback
+    }
+
+    try {
+      const rows = await apiFetch<Array<{ xpEarned: number }>>(
+        `/progress/user/${encodeURIComponent(walletAddress)}`,
+      );
+      const xp = rows.reduce((sum, row) => sum + (row.xpEarned ?? 0), 0);
+      return { xp, level: Math.floor(Math.sqrt(xp / 100)) };
+    } catch {
+      return { xp: 0, level: 1 };
+    }
   }
 
   async getStreak(userId: string): Promise<StreakData> {

@@ -2,6 +2,17 @@ import { create } from "zustand";
 import { learningProgressService } from "@/services/learning-progress-service";
 import type { StreakData, StreakDay } from "@/types/domain";
 
+function generateEmptyCalendar(days: number): StreakDay[] {
+  return Array.from({ length: days }, (_, i) => {
+    const date = new Date(Date.now() - (days - 1 - i) * 24 * 60 * 60 * 1000);
+    return {
+      date: date.toISOString().slice(0, 10),
+      active: false,
+      bonusApplied: false,
+    };
+  });
+}
+
 interface UserState {
   walletAddress: string | null;
   xp: number;
@@ -20,7 +31,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   level: 1,
   streakDays: 0,
   longestStreakDays: 0,
-  streakCalendar: [],
+  streakCalendar: generateEmptyCalendar(35),
   isLoading: false,
 
   setWalletAddress: (address) => {
@@ -33,7 +44,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         level: 1,
         streakDays: 0,
         longestStreakDays: 0,
-        streakCalendar: [],
+        streakCalendar: generateEmptyCalendar(35),
       });
     }
   },
@@ -68,10 +79,13 @@ export const useUserStore = create<UserState>((set, get) => ({
 
       set({
         xp: xpData.xp,
-        level: xpData.level,
+        level: Math.max(1, xpData.level),
         streakDays: streakData.currentDays,
         longestStreakDays: streakData.longestDays,
-        streakCalendar: streakData.calendar,
+        streakCalendar:
+          streakData.calendar.length > 0
+            ? streakData.calendar
+            : generateEmptyCalendar(35),
         isLoading: false,
       });
     } catch (error) {

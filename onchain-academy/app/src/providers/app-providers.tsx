@@ -7,7 +7,9 @@ import { LocaleProvider } from "@/providers/locale-provider";
 import { SolanaProvider } from "@/providers/solana-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 
-export function AppProviders({ children }: PropsWithChildren): React.JSX.Element {
+export function AppProviders({
+  children,
+}: PropsWithChildren): React.JSX.Element {
   return (
     <ThemeProvider
       attribute="class"

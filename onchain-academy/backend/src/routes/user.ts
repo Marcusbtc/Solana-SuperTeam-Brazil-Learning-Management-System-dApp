@@ -54,6 +54,23 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
     };
   });
 
+  app.get("/user/is-admin/:wallet", async (request, reply) => {
+    const params = z
+      .object({ wallet: z.string().min(32) })
+      .parse(request.params);
+
+    const link = await prisma.walletLink.findUnique({
+      where: { address: params.wallet },
+      include: { user: { select: { isAdmin: true } } },
+    });
+
+    if (!link) {
+      return reply.code(200).send({ isAdmin: false });
+    }
+
+    return { isAdmin: link.user.isAdmin };
+  });
+
   app.get("/user/profile/:userId", async (request) => {
     const params = z
       .object({ userId: z.string().min(1) })

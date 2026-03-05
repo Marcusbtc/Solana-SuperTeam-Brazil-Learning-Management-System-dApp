@@ -297,10 +297,18 @@ export default function HomePage(): React.JSX.Element {
                   alt={partner.name}
                   width={partner.width}
                   height={partner.height}
+                  style={{
+                    height: partner.name === "Jupiter" ? "40px" : "28px",
+                    width: "auto",
+                  }}
                   className={
-                    partner.toneMode === "neutralized"
-                      ? "h-6 w-auto opacity-30 [filter:grayscale(1)_saturate(0)_brightness(0)_invert(1)] sm:h-7"
-                      : "h-6 w-auto opacity-30 grayscale sm:h-7"
+                    partner.name === "Jupiter"
+                      ? partner.toneMode === "neutralized"
+                        ? "opacity-30 [filter:grayscale(1)_saturate(0)_brightness(0)_invert(1)]"
+                        : "opacity-30 grayscale"
+                      : partner.toneMode === "neutralized"
+                        ? "opacity-30 [filter:grayscale(1)_saturate(0)_brightness(0)_invert(1)]"
+                        : "opacity-30 grayscale"
                   }
                 />
               </div>
@@ -774,10 +782,7 @@ export default function HomePage(): React.JSX.Element {
             </p>
             <Button
               size="lg"
-              className="h-14 px-12 text-base font-bold rounded-full text-black hover:scale-105 transition-all shadow-[0_0_40px_rgba(20,241,149,0.4)] border-0"
-              style={{
-                background: "linear-gradient(135deg, #14F195, #9945FF)",
-              }}
+              className="hero-cta-gradient h-14 px-10 text-base font-bold rounded-full text-black hover:scale-[1.04] transition-all shadow-[0_0_50px_rgba(153,69,255,0.3)] border-0"
               asChild
             >
               <Link href="/courses">{t("homePage.createAccount")}</Link>

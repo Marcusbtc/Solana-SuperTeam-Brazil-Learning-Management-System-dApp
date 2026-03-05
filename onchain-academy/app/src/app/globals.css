@@ -403,4 +403,27 @@ code {
 .wallet-pill.wallet-adapter-button {
   min-width: 0 !important;
   line-height: 1 !important;
+  border: 0 !important;
+  color: #05070f !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #14f195 0%, #9945ff 50%, #14f195 100%) !important;
+  background-size: 220% 220% !important;
+  animation: heroCtaGradientFlow 6s ease-in-out infinite !important;
+  box-shadow: 0 0 50px rgba(153, 69, 255, 0.3) !important;
+}
+
+.wallet-pill.wallet-adapter-button:hover {
+  transform: scale(1.04);
+}
+
+.wallet-pill.wallet-adapter-button:focus-visible {
+  outline: 2px solid rgba(20, 241, 149, 0.7);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wallet-pill.wallet-adapter-button {
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
 }

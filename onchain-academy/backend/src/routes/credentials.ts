@@ -3,6 +3,7 @@ import { z } from "zod";
 import { env } from "../config/env.js";
 import { prisma } from "../lib/prisma.js";
 import { deriveLevel } from "../lib/level.js";
+import { mockCredentials } from "../data/mock-credentials.js";
 
 type HeliusAsset = {
   id: string;
@@ -230,18 +231,22 @@ export async function credentialRoutes(app: FastifyInstance): Promise<void> {
       orderBy: { syncedAt: "desc" },
     });
 
-    return cached.map((credential) => ({
-      credentialId: credential.credentialId,
-      title: credential.title,
-      track: credential.track,
-      level: credential.level,
-      coursesCompleted: 0,
-      totalXp: 0,
-      mintAddress: credential.mintAddress,
-      metadataUri: credential.metadataUri,
-      explorerUrl: `https://explorer.solana.com/address/${credential.mintAddress}?cluster=${env.SOLANA_CLUSTER}`,
-      verified: credential.verified,
-      source: "helius",
-    }));
+    if (cached.length > 0) {
+      return cached.map((credential) => ({
+        credentialId: credential.credentialId,
+        title: credential.title,
+        track: credential.track,
+        level: credential.level,
+        coursesCompleted: 0,
+        totalXp: 0,
+        mintAddress: credential.mintAddress,
+        metadataUri: credential.metadataUri,
+        explorerUrl: `https://explorer.solana.com/address/${credential.mintAddress}?cluster=${env.SOLANA_CLUSTER}`,
+        verified: credential.verified,
+        source: "helius",
+      }));
+    }
+
+    return mockCredentials;
   });
 }

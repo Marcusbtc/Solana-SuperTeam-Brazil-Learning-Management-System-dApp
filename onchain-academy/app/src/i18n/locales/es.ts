@@ -17,11 +17,21 @@ export const es = {
     loginWithGoogle: "Login con Google",
     mockLoginTitle: "Login mock",
     mockLoginDescription: "aún no está habilitado.",
+    loginModalTitle: "Iniciar sesión en Academy",
+    loginModalSubtitle: "Elige un proveedor para continuar",
+    loginModalDisclaimer:
+      "Autenticación simulada — no ocurre un inicio de sesión real.",
+    loginOrWallet: "o",
+    loginWithWallet: "Conectar Billetera",
     levelShort: "Niv",
     xp: "XP",
     localeEnglish: "Inglés",
     localePortuguese: "Portugués",
     localeSpanish: "Español",
+    profile: "Perfil",
+    copyAddress: "Copiar dirección",
+    addressCopied: "Dirección copiada",
+    disconnect: "Desconectar",
   },
   footer: {
     description:

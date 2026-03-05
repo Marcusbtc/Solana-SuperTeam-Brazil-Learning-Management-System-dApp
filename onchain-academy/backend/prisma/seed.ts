@@ -70,24 +70,52 @@ async function main() {
     });
   }
 
-  await prisma.credentialCache.upsert({
-    where: {
-      walletAddress_credentialId: {
-        walletAddress: users[0].wallet,
-        credentialId: "anchor-track",
-      },
-    },
-    update: {},
-    create: {
+  const seedCredentials = [
+    {
       walletAddress: users[0].wallet,
-      credentialId: "anchor-track",
-      title: "Anchor Track Credential",
-      track: "Anchor",
-      level: 2,
-      mintAddress: "Fakemint11111111111111111111111111111111111",
-      metadataUri: "https://arweave.net/anchor-track",
+      credentialId: "cred-bootcamp-marcus",
+      title: "Solana Bootcamp Graduate",
+      track: "Solana Core Engineering",
+      level: 3,
+      mintAddress: "BtCamp1111111111111111111111111111111111111",
+      metadataUri: "https://arweave.net/solana-bootcamp-credential-metadata-v1",
+      verified: true,
     },
-  });
+    {
+      walletAddress: users[0].wallet,
+      credentialId: "cred-anchor-marcus",
+      title: "Anchor Builder",
+      track: "Solana Core Engineering",
+      level: 5,
+      mintAddress: "AnchrB1111111111111111111111111111111111111",
+      metadataUri: "https://arweave.net/anchor-builder-credential-metadata-v1",
+      verified: true,
+    },
+    {
+      walletAddress: users[1].wallet,
+      credentialId: "cred-security-ana",
+      title: "Security Defender",
+      track: "Solana Core Engineering",
+      level: 8,
+      mintAddress: "SecDef1111111111111111111111111111111111111",
+      metadataUri:
+        "https://arweave.net/security-defender-credential-metadata-v1",
+      verified: true,
+    },
+  ];
+
+  for (const cred of seedCredentials) {
+    await prisma.credentialCache.upsert({
+      where: {
+        walletAddress_credentialId: {
+          walletAddress: cred.walletAddress,
+          credentialId: cred.credentialId,
+        },
+      },
+      update: {},
+      create: cred,
+    });
+  }
 }
 
 main()

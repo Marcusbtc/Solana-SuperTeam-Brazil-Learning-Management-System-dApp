@@ -62,27 +62,42 @@
     },
 
     {
+      "_id": "seed-2026-lesson-bootcamp-0",
+      "_type": "lesson",
+      "lessonId": "bootcamp-lesson-0",
+      "title": "What Makes Solana Fast",
+      "order": 1,
+      "module": "Module 1: Foundations",
+      "lessonType": "content",
+      "contentFormat": "video",
+      "videoUrl": "https://www.youtube.com/embed/rywOYfGu4EA",
+      "markdown": "# What Makes Solana Fast\n\nWatch the overview, then explore Proof of History, parallel transaction execution, and account locking in depth.\n\n## Key Concepts\n\n- **Proof of History** — a cryptographic clock that orders events without consensus overhead\n- **Tower BFT** — a PoH-optimized PBFT variant that slashes message complexity\n- **Turbine** — block propagation inspired by BitTorrent\n- **Gulf Stream** — mempool-less transaction forwarding to upcoming validators\n- **Sealevel** — parallel smart contract runtime that executes thousands of programs simultaneously"
+    },
+    {
       "_id": "seed-2026-lesson-bootcamp-1",
       "_type": "lesson",
       "lessonId": "bootcamp-lesson-1",
       "title": "Solana Runtime Fundamentals",
-      "order": 1,
+      "order": 2,
       "module": "Module 1: Foundations",
       "lessonType": "content",
       "contentFormat": "reading",
-      "markdown": "## Runtime Basics\nLearn account ownership, rent, and execution model fundamentals."
+      "markdown": "## Runtime Basics\n\nSolana's runtime enforces strict rules about how programs interact with accounts.\n\n### Accounts\n\nEvery piece of data on Solana lives in an **account**. Accounts have:\n- A **public key** (32-byte address)\n- A **lamport balance** (SOL, in smallest unit)\n- **Data** (up to 10 MB)\n- An **owner program** that controls writes\n\n### Rent\n\nAccounts must maintain a minimum lamport balance proportional to their data size — this is called **rent exemption**. Accounts below this threshold are eventually garbage-collected.\n\n### Execution Model\n\nTransactions are atomic: all instructions succeed or all fail. Instructions run in order within a transaction, but different transactions can execute in **parallel** if they don't share writable accounts."
     },
     {
       "_id": "seed-2026-lesson-bootcamp-2",
       "_type": "lesson",
       "lessonId": "bootcamp-lesson-2",
       "title": "PDA Fundamentals",
-      "order": 2,
+      "order": 3,
       "module": "Module 1: Foundations",
       "lessonType": "challenge",
       "language": "rust",
-      "markdown": "Implement deterministic PDA derivation and validation.",
-      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-bootcamp-pda" }
+      "markdown": "# PDA Fundamentals\n\nProgram Derived Addresses (PDAs) are deterministic account addresses that have no corresponding private key — they can only be signed by the program that derives them.\n\n## Why PDAs?\n\n- Store per-user or per-object state without managing keypairs\n- Programs can \"sign\" for PDAs via `invoke_signed`\n- Seeds + bump uniquely identify each PDA\n\n## Challenge\n\nImplement PDA derivation with deterministic seeds and bump checks.",
+      "challenge": {
+        "_type": "reference",
+        "_ref": "seed-2026-challenge-bootcamp-pda"
+      }
     },
 
     {
@@ -106,7 +121,10 @@
       "lessonType": "challenge",
       "language": "rust",
       "markdown": "Apply account constraints to reject invalid instruction inputs.",
-      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-anchor-constraints" }
+      "challenge": {
+        "_type": "reference",
+        "_ref": "seed-2026-challenge-anchor-constraints"
+      }
     },
 
     {
@@ -130,7 +148,10 @@
       "lessonType": "challenge",
       "language": "rust",
       "markdown": "Patch signer validation and privilege boundaries.",
-      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-security-signer" }
+      "challenge": {
+        "_type": "reference",
+        "_ref": "seed-2026-challenge-security-signer"
+      }
     },
 
     {
@@ -154,7 +175,10 @@
       "lessonType": "challenge",
       "language": "rust",
       "markdown": "Implement health-factor and liquidation protections.",
-      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-defi-risk" }
+      "challenge": {
+        "_type": "reference",
+        "_ref": "seed-2026-challenge-defi-risk"
+      }
     },
 
     {
@@ -189,7 +213,10 @@
       "lessonType": "challenge",
       "language": "rust",
       "markdown": "Refactor instruction flow for lower compute and better throughput.",
-      "challenge": { "_type": "reference", "_ref": "seed-2026-challenge-performance-budget" }
+      "challenge": {
+        "_type": "reference",
+        "_ref": "seed-2026-challenge-performance-budget"
+      }
     },
 
     {
@@ -198,6 +225,7 @@
       "title": "Module 1: Foundations",
       "order": 1,
       "lessons": [
+        { "_type": "reference", "_ref": "seed-2026-lesson-bootcamp-0" },
         { "_type": "reference", "_ref": "seed-2026-lesson-bootcamp-1" },
         { "_type": "reference", "_ref": "seed-2026-lesson-bootcamp-2" }
       ]
@@ -238,18 +266,14 @@
       "_type": "module",
       "title": "Module 1: Protocol Primitives",
       "order": 1,
-      "lessons": [
-        { "_type": "reference", "_ref": "seed-2026-lesson-defi-1" }
-      ]
+      "lessons": [{ "_type": "reference", "_ref": "seed-2026-lesson-defi-1" }]
     },
     {
       "_id": "seed-2026-module-defi-2",
       "_type": "module",
       "title": "Module 2: Risk Controls",
       "order": 2,
-      "lessons": [
-        { "_type": "reference", "_ref": "seed-2026-lesson-defi-2" }
-      ]
+      "lessons": [{ "_type": "reference", "_ref": "seed-2026-lesson-defi-2" }]
     },
 
     {
@@ -281,8 +305,8 @@
       "summary": "Start building with Solana from first principles.",
       "description": "Hands-on intro to Solana architecture, accounts, and PDAs.",
       "difficulty": "beginner",
-      "durationMinutes": 180,
-      "xpTotal": 600,
+      "durationMinutes": 210,
+      "xpTotal": 750,
       "badgeTitle": "Bootcamp Graduate",
       "badgeTier": "bronze",
       "badgeDescription": "Awarded for completing the Solana fundamentals bootcamp.",
@@ -314,9 +338,7 @@
       "trackId": "solana-core-engineering",
       "editorialStatus": "published",
       "publishedAt": "2026-03-04T00:00:00.000Z",
-      "modules": [
-        { "_type": "reference", "_ref": "seed-2026-module-anchor-1" }
-      ]
+      "modules": [{ "_type": "reference", "_ref": "seed-2026-module-anchor-1" }]
     },
     {
       "_id": "seed-2026-course-security",

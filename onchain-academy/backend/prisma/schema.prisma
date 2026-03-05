@@ -19,6 +19,7 @@ model User {
   language          String         @default("en")
   theme             String         @default("dark")
   profileVisibility String         @default("public")
+  isAdmin           Boolean        @default(false)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   walletLinks       WalletLink[]

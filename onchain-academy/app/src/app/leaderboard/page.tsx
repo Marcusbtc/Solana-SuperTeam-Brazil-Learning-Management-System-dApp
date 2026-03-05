@@ -6,6 +6,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { learningProgressService } from "@/services/learning-progress-service";
+import { getMockLeaderboard } from "@/data/mock-leaderboard";
 import type { LeaderboardEntry, Timeframe } from "@/types/domain";
 import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/providers/locale-provider";
@@ -47,12 +48,12 @@ export default function LeaderboardPage(): React.JSX.Element {
         courseFilter === "all" ? undefined : courseFilter,
       )
       .then((rows) => {
-        setEntries(rows);
+        setEntries(rows.length > 0 ? rows : getMockLeaderboard(timeframe));
         setStatus("ready");
       })
       .catch(() => {
-        setEntries([]);
-        setStatus("error");
+        setEntries(getMockLeaderboard(timeframe));
+        setStatus("ready");
       });
   }, [timeframe, courseFilter]);
 

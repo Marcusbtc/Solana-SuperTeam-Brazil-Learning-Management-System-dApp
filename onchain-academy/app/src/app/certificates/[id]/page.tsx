@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { learningProgressService } from "@/services/learning-progress-service";
+import { findMockCredential } from "@/data/mock-credentials";
 import type { Credential } from "@/types/domain";
 import { useLocale } from "@/providers/locale-provider";
 
@@ -29,8 +30,13 @@ export default function CertificatePage(): React.JSX.Element {
   const certificateRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!publicKey || !params.id) {
-      setCredential(null);
+    if (!params.id) {
+      setCredential(findMockCredential("") ?? null);
+      return;
+    }
+
+    if (!publicKey) {
+      setCredential(findMockCredential(params.id) ?? null);
       return;
     }
 
@@ -41,10 +47,12 @@ export default function CertificatePage(): React.JSX.Element {
           rows.find(
             (row) =>
               row.credentialId === params.id || row.mintAddress === params.id,
-          ) ?? null;
+          ) ??
+          findMockCredential(params.id) ??
+          null;
         setCredential(match);
       })
-      .catch(() => setCredential(null));
+      .catch(() => setCredential(findMockCredential(params.id) ?? null));
   }, [publicKey, params.id]);
 
   const trackName = credential?.title ?? params.id;
@@ -161,21 +169,21 @@ export default function CertificatePage(): React.JSX.Element {
           <div
             id="certificate-print-target"
             ref={certificateRef}
-            className="relative aspect-[1.4/1] w-full rounded-3xl border-2 border-primary/20 bg-[#0f1219] overflow-hidden shadow-2xl flex flex-col items-center justify-center p-8 sm:p-16 text-center group"
+            className="relative w-full min-h-[420px] rounded-3xl border-2 border-primary/20 bg-[#0f1219] shadow-2xl flex flex-col items-center justify-between p-8 sm:p-14 text-center group overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-secondary/10 pointer-events-none" />
-            <div className="relative z-10 w-full flex flex-col items-center">
-              <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl bg-background/50 backdrop-blur-md border border-border/50 flex items-center justify-center mb-8 shadow-2xl">
-                <ShieldCheck className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
+            <div className="relative z-10 w-full flex flex-col items-center flex-1">
+              <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-background/50 backdrop-blur-md border border-border/50 flex items-center justify-center mb-5 shadow-2xl">
+                <ShieldCheck className="h-8 w-8 sm:h-10 sm:w-10 text-primary" />
               </div>
 
-              <span className="text-sm sm:text-base font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">
                 {t("certificatePage.completionTitle")}
               </span>
-              <h2 className="font-display text-4xl sm:text-6xl font-black text-foreground mb-6 leading-tight">
+              <h2 className="font-display text-3xl sm:text-5xl font-black text-foreground mb-4 leading-tight">
                 {trackName}
               </h2>
-              <p className="text-lg sm:text-xl text-muted-foreground/80 max-w-lg mb-12">
+              <p className="text-base sm:text-lg text-muted-foreground/80 max-w-lg mb-8">
                 {t("certificatePage.certifies")}{" "}
                 <strong className="text-foreground">
                   {publicKey
@@ -185,7 +193,7 @@ export default function CertificatePage(): React.JSX.Element {
                 {t("certificatePage.completedTrack")}
               </p>
 
-              <div className="w-full flex justify-between items-end border-t border-border/30 pt-8 px-4 sm:px-8 mt-auto">
+              <div className="w-full flex justify-between items-end border-t border-border/30 pt-6 px-4 sm:px-8 mt-auto">
                 <div className="text-left space-y-1">
                   <span className="text-xs text-muted-foreground uppercase tracking-widest block">
                     {t("certificatePage.dateIssued")}

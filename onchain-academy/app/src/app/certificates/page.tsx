@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ExternalLink, ShieldCheck } from "lucide-react";
+import { ExternalLink, ShieldCheck, Sparkles } from "lucide-react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLocale } from "@/providers/locale-provider";
 import { learningProgressService } from "@/services/learning-progress-service";
+import { MOCK_CREDENTIALS } from "@/data/mock-credentials";
 import type { Credential } from "@/types/domain";
 
 export default function CertificatesPage(): React.JSX.Element {
@@ -18,6 +19,7 @@ export default function CertificatesPage(): React.JSX.Element {
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
     "idle",
   );
+  const isDemo = !publicKey;
 
   useEffect(() => {
     if (!publicKey) {
@@ -39,6 +41,8 @@ export default function CertificatesPage(): React.JSX.Element {
       });
   }, [publicKey]);
 
+  const displayCredentials = isDemo ? MOCK_CREDENTIALS : credentials;
+
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <div className="space-y-2">
@@ -50,10 +54,14 @@ export default function CertificatesPage(): React.JSX.Element {
         </p>
       </div>
 
-      {!publicKey ? (
-        <Card>
-          <CardContent className="py-8 text-sm text-muted-foreground">
-            {t("certificatesPage.connectWallet")}
+      {isDemo ? (
+        <Card className="border-primary/20 bg-primary/5">
+          <CardContent className="flex items-center gap-3 py-4 text-sm text-muted-foreground">
+            <Sparkles className="h-4 w-4 shrink-0 text-primary" />
+            <span>
+              {t("certificatesPage.demoPreview") ??
+                "Preview — connect your wallet to see your real credentials."}
+            </span>
           </CardContent>
         </Card>
       ) : null}
@@ -74,7 +82,7 @@ export default function CertificatesPage(): React.JSX.Element {
         </Card>
       ) : null}
 
-      {status === "ready" && credentials.length === 0 ? (
+      {!isDemo && status === "ready" && credentials.length === 0 ? (
         <Card>
           <CardContent className="py-8 text-sm text-muted-foreground">
             {t("certificatesPage.empty")}
@@ -82,28 +90,48 @@ export default function CertificatesPage(): React.JSX.Element {
         </Card>
       ) : null}
 
-      {credentials.length > 0 ? (
+      {displayCredentials.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {credentials.map((credential) => (
-            <Card key={credential.credentialId} className="border-border/50">
+          {displayCredentials.map((credential) => (
+            <Card
+              key={credential.credentialId}
+              className="border-border/50 transition-shadow hover:shadow-lg"
+            >
               <CardHeader className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="text-base">
                     {credential.title}
                   </CardTitle>
-                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  <ShieldCheck
+                    className={`h-4 w-4 shrink-0 ${credential.verified ? "text-primary" : "text-muted-foreground"}`}
+                  />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary">{credential.track}</Badge>
                   <Badge variant="outline">
                     {t("certificatesPage.level")} {credential.level}
                   </Badge>
+                  {credential.verified ? (
+                    <Badge
+                      variant="outline"
+                      className="border-primary/30 text-primary"
+                    >
+                      {t("certificatePage.verified") ?? "Verified"}
+                    </Badge>
+                  ) : null}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="line-clamp-1 text-xs text-muted-foreground">
-                  {credential.mintAddress}
-                </p>
+                <div className="space-y-1">
+                  <p className="line-clamp-1 font-mono text-xs text-muted-foreground">
+                    {credential.mintAddress}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {credential.totalXp.toLocaleString()} XP &middot;{" "}
+                    {credential.coursesCompleted}{" "}
+                    {credential.coursesCompleted === 1 ? "course" : "courses"}
+                  </p>
+                </div>
                 <div className="flex gap-2">
                   <Button size="sm" className="flex-1" asChild>
                     <Link href={`/certificates/${credential.credentialId}`}>

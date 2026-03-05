@@ -32,16 +32,7 @@ export async function recordStreakActivity(
     },
   });
 
-  if (!existingEvent) {
-    await prisma.streakDayEvent.create({
-      data: {
-        userId,
-        activityDay,
-        bonusApplied,
-      },
-    });
-  }
-
+  // Compute new streak count before writing the event so we can auto-detect milestones
   const current = await prisma.streakState.findUnique({ where: { userId } });
 
   let currentDays = current?.currentDays ?? 0;
@@ -60,6 +51,19 @@ export async function recordStreakActivity(
       currentDays = 1;
     }
     longestDays = Math.max(longestDays, currentDays);
+  }
+
+  // Auto-apply bonus on every 7-day milestone (7, 14, 21, ...)
+  const effectiveBonus = bonusApplied || currentDays % 7 === 0;
+
+  if (!existingEvent) {
+    await prisma.streakDayEvent.create({
+      data: {
+        userId,
+        activityDay,
+        bonusApplied: effectiveBonus,
+      },
+    });
   }
 
   return prisma.streakState.upsert({
