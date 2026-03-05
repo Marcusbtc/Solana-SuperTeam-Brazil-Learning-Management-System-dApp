@@ -6,7 +6,24 @@ import { listCourses } from "../lib/content-repository.js";
 
 export async function adminRoutes(app: FastifyInstance): Promise<void> {
   app.addHook("preHandler", async (request, reply) => {
-    if (request.headers["x-admin-token"] !== env.ADMIN_TOKEN) {
+    if (request.headers["x-admin-token"] === env.ADMIN_TOKEN) {
+      return;
+    }
+
+    const walletHeader = request.headers["x-admin-wallet"];
+    const walletAddress =
+      typeof walletHeader === "string" ? walletHeader.trim() : "";
+
+    if (!walletAddress) {
+      return reply.code(401).send({ error: "Unauthorized" });
+    }
+
+    const walletLink = await prisma.walletLink.findUnique({
+      where: { address: walletAddress },
+      include: { user: { select: { isAdmin: true } } },
+    });
+
+    if (!walletLink?.user.isAdmin) {
       return reply.code(401).send({ error: "Unauthorized" });
     }
   });

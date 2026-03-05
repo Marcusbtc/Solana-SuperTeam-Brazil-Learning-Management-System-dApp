@@ -13,10 +13,13 @@ async function proxyAdminRequest(
   const url = new URL(`${backendBaseUrl}/admin/${targetPath}`);
   url.search = request.nextUrl.search;
 
+  const adminWallet = request.headers.get("x-admin-wallet");
+
   const response = await fetch(url.toString(), {
     method,
     headers: {
       "x-admin-token": process.env.ADMIN_TOKEN ?? "dev-admin-token",
+      ...(adminWallet ? { "x-admin-wallet": adminWallet } : {}),
       "content-type": "application/json",
     },
     ...(method === "PATCH"

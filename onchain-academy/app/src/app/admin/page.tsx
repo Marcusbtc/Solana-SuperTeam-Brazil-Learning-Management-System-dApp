@@ -19,6 +19,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useLocale } from "@/providers/locale-provider";
 
 type AdminKpis = {
@@ -57,8 +58,14 @@ type AdminUsersResponse = {
 
 type Tab = "overview" | "courses" | "users";
 
-async function fetchAdmin<T>(path: string): Promise<T> {
-  const response = await fetch(path, { cache: "no-store" });
+async function fetchAdmin<T>(
+  path: string,
+  adminWallet?: string,
+): Promise<T> {
+  const response = await fetch(path, {
+    cache: "no-store",
+    ...(adminWallet ? { headers: { "x-admin-wallet": adminWallet } } : {}),
+  });
   if (!response.ok) {
     const body = (await response.json().catch(() => ({}))) as {
       error?: string;
@@ -124,6 +131,7 @@ function StatCard({
 
 export default function AdminPage(): React.JSX.Element {
   const { t } = useLocale();
+  const { publicKey } = useWallet();
   const [tab, setTab] = useState<Tab>("overview");
   const [kpis, setKpis] = useState<AdminKpis | null>(null);
   const [courses, setCourses] = useState<AdminCourse[]>([]);
@@ -147,11 +155,15 @@ export default function AdminPage(): React.JSX.Element {
   const loadData = useCallback(async () => {
     setStatus("loading");
     setErrorMessage("");
+    const adminWallet = publicKey?.toBase58();
     try {
       const [fetchedKpis, fetchedCourses, fetchedUsers] = await Promise.all([
-        fetchAdmin<AdminKpis>("/api/admin/kpis"),
-        fetchAdmin<AdminCourse[]>("/api/admin/courses"),
-        fetchAdmin<AdminUsersResponse>("/api/admin/users?page=1&pageSize=50"),
+        fetchAdmin<AdminKpis>("/api/admin/kpis", adminWallet),
+        fetchAdmin<AdminCourse[]>("/api/admin/courses", adminWallet),
+        fetchAdmin<AdminUsersResponse>(
+          "/api/admin/users?page=1&pageSize=50",
+          adminWallet,
+        ),
       ]);
       setKpis(fetchedKpis);
       setCourses(fetchedCourses);
@@ -163,7 +175,7 @@ export default function AdminPage(): React.JSX.Element {
       );
       setStatus("error");
     }
-  }, []);
+  }, [publicKey]);
 
   useEffect(() => {
     void loadData();
@@ -199,9 +211,13 @@ export default function AdminPage(): React.JSX.Element {
     setSavingUserId(userId);
     setSaveError("");
     try {
+      const adminWallet = publicKey?.toBase58();
       const response = await fetch(`/api/admin/users/${userId}`, {
         method: "PATCH",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          ...(adminWallet ? { "x-admin-wallet": adminWallet } : {}),
+        },
         body: JSON.stringify({ username, displayName }),
       });
       if (!response.ok) {
